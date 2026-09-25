@@ -1,0 +1,10 @@
+{
+    "name": "Gefina",
+    "version": "0.0.0.",
+    "description": "Sistema de gestão de contas a receber.",
+    "author": "George Marrones",
+    "type":"module",
+    "scripts": {
+        "dev": "node --watch ./server.ts"
+    }
+}
