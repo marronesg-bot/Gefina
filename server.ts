@@ -1,13 +1,12 @@
 import { createServer } from 'node:http';
 
+import send from './send.js';
+
 createServer(function (request, response) {
     if (request.url !== '/api/health') {
-        response.writeHead(404, { 'content-type': 'application/json' });
-        response.end(JSON.stringify({ message: 'Recurso nao encontrado' }));
+        send(response, 404, {message: 'Recurso não encontrado'});
         return;
     }
 
-    response.writeHead(200, { 'content-type': 'application/json' });
-    response.end(JSON.stringify({ status: 'ok' }));
+    send(response, 200, {status: 'ok'});
 }).listen(3000);
-
