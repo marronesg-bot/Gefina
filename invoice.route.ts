@@ -1,4 +1,4 @@
-import{Router} from 'express';
+import { Router } from 'express';
 
 import invoices from './invoice.data.js';
 
