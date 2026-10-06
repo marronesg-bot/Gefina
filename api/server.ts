@@ -12,7 +12,7 @@
 
 import express from 'express';
 
-import invoices from './invoice.route.js';
+import invoices from './invoice.route.ts';
 
 const app = express();
 

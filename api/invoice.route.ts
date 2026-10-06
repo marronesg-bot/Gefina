@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import invoices from './invoice.data.js';
+import invoices from './invoice.data.ts';
 
 const router = Router();
 
