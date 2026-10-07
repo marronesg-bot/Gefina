@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gefina - Faturas</title>
+    <script type="module" crossorigin src="/assets/index-4TV-QTF2.js"></script>
+  </head>
+  <body>
+    <h1>Faturas</h1>
+    
+    <div></div>
+
+
+     <!-- <script type ='text/babel'>
+
+      const invoices = [
+        {
+          id: 1,
+          amount: 125000,
+          status: "pending",
+          issueDate: "2026-06-01",
+          dueDate: "2026-06-15",
+          customer: {
+            id: 1,
+            name: "Construtora Meridiano",
+            email: "contato@meridiano.com.br",
+          },
+        },
+        {
+          id: 2,
+          amount: 348000,
+          status: "paid",
+          issueDate: "2026-05-12",
+          dueDate: "2026-06-11",
+          customer: {
+            id: 1,
+            name: "Construtora Meridiano",
+            email: "contato@meridiano.com.br",
+          },
+        },
+        {
+          id: 3,
+          amount: 96500,
+          status: "pending",
+          issueDate: "2026-06-20",
+          dueDate: "2026-07-20",
+          customer: {
+            id: 2,
+            name: "Gráfica Aurora",
+            email: "contato@graficaaurora.com.br",
+          },
+        },
+      ];
+    
+      const root = document.querySelector('div');
+            
+            function statusLabel(status) {
+                return status === 'paid' ? 'Pago' : 'Pendente';
+            }
+
+            function InvoiceRow(props) {
+                const invoice = props.invoice;
+
+                return (
+                    <tr>
+                        <td>{invoice.customer.name}</td>
+                        <td>{invoice.amount}</td>
+                        <td>{invoice.issueDate}</td>
+                        <td>{invoice.dueDate}</td>
+                        <td>{statusLabel(invoice.status)}</td>
+                    </tr>
+                );
+            }
+
+            function InvoiceTable(props) {
+                return (
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Valor</th>
+                            <th>Emissão</th>
+                            <th>Vencimento</th>
+                            <th>Situação</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {props.invoices.map(function (invoice) { // feito de fbaixoorma dinamica, esta sendo chamado
+                                return <InvoiceRow  //  na renderizacao la em baixo, isso dentro do props(objeto)
+                                    key={invoice.id} //map é um metodo de arrey, pois nao deu certo com for, entao ele percorre a tabela
+                                    invoice={invoice} //key - o react pede uma chave de forma obrigatoria
+                                />;  //invoice - é o arrey
+                            })}
+                        </tbody>
+                    </table>
+                );
+            }
+
+            function App() {
+              return <InvoiceTable invoices={invoices}/> // foi adicionado function App
+            } 
+
+            //ReactDOM.createRoot(root).render(<InvoiceTable invoices={invoices} />); sai disso
+            ReactDOM.createRoot(root).render(<App/>);
+    </script> -->
+      
+     </body>
+</html>
