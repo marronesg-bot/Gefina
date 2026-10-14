@@ -7,7 +7,7 @@ CREATE TABLE users (
     created_at TIMESTAMP NOT NULL NOW()
 );
 
-CREATE TABLE session(
+CREATE TABLE sessions(
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES user(id) ON DELETE CASCADE,
     expires_at TIMESTAMP NOT NULL,
