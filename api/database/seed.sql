@@ -74,15 +74,3 @@ SELECT
   CURRENT_DATE - 30 - n * 3,
   CURRENT_DATE - 60 - n * 3 + n % 4
 FROM generate_series(1, 36) AS n;
-
-TRUNCATE users, sessions, customers, invoices RESTART IDENTITY;
-
-INSERT INTO invoices (customers_id, amount, status, issue_date, due_date, created_at)
-SELECT
-    1 + n % 20,
-    5000 + (n * 97391)  % 799500,
-    'pending',
-    CURRENT_DATE - n * 4,
-    CURRENT_DATE - n * 4 + 15 + n % 45,
-    CURRENT_DATE - n * 4 + n % 5,
-FROM generate_series(1, 81) AS n;  // o numero esta sendo renomeado  e chamando cada numero de n uma variavel.
