@@ -1,5 +1,6 @@
 import pool from "./database.ts";
-type InvoiceStatus = 'pending' | 'paid';
+type InvoiceStatus = 'paid' | 'pending';
+type InvoiceSituation = 'paid' | 'pending' | 'overdue';
 
 interface Customer {
   id: number;
@@ -11,6 +12,7 @@ interface Invoice {
   id: number;
   amount: number;
   status: InvoiceStatus;
+  situation: InvoiceSituation;
   issueDate: string;
   dueDate: string;
   customer: Customer;
@@ -20,6 +22,7 @@ interface InvoiceRow {
   id: number;
   amount: number;
   status: InvoiceStatus;
+  situation: InvoiceSituation;
   issue_date: string;
   due_date: string;
   customer_id: number;
@@ -32,6 +35,7 @@ function toInvoice(row: InvoiceRow): Invoice {
     id: row.id,
     amount: row.amount,
     status: row.status,
+    situation: row.situation,
     issueDate: row.issue_date,
     dueDate: row.due_date,
     customer: {
@@ -49,8 +53,13 @@ SELECT
   invoices.id,
   invoices.amount, 
   invoices.status, 
-  invoices.issue_date, 
-  invoices.due_date,
+  CASE
+    WHEN invoices.status = 'paid' THEN 'paid'
+    WHEN invoices.due_date <CURRENT_DATE THEN 'overdue'
+    ELSE 'pending'
+  END AS situation,
+  invoices.issue_date::text, 
+  invoices.due_date::text,
   customers.id AS customer_id,
   customers.name AS customer_name,
   customers.email AS customer_email
