@@ -3,6 +3,7 @@
 import express from 'express';
 import path from 'node:path';
 
+import dashboard from './dashboard.route.ts';
 import invoices from './invoice.route.ts';
 
 import pool from './database.ts'
@@ -35,6 +36,7 @@ app.get('/api/health', async (_request, response) => {
   }
 });
 
+app.use('/api/dashboard', dashboard);
 app.use('/api/invoices', invoices);
 
 app.use(express.static(dist));

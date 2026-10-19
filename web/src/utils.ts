@@ -1,7 +1,7 @@
 import { InvoiceSituation } from './invoiceType.ts';
 
 export function situationLabel(situation: InvoiceSituation) {
-    return situation === 'paid' ? 'Paga' : situation === 'overdue' ? 'Atrasada' : 'Pendete';
+    return situation === 'paid' ? 'Paga' : situation === 'overdue' ? 'Atrasada' : 'Pendente';
 }
 
 export function formatCurrency(cents: number): string {
