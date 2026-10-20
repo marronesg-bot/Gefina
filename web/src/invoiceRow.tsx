@@ -1,5 +1,5 @@
 import { Invoice } from './invoiceType.ts';
-import {situationLabel
+import {situationLabel,
         formatCurrency,
         formatDate
 
