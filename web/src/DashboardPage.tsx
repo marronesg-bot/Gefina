@@ -43,8 +43,8 @@ export default function DashboardPage () {
         <h1>Painel Inicial</h1>
 
         <div>
-            <SummaryCard label= 'TOtal recebido: 'value={formatCurrency(dashboard.totals.paid)} />
-            <SummaryCard label= 'TOtal pendente: 'value={formatCurrency(dashboard.totals.pending)} />
+            <SummaryCard label= 'Total recebido: 'value={formatCurrency(dashboard.totals.paid)} />
+            <SummaryCard label= 'Total pendente: 'value={formatCurrency(dashboard.totals.pending)} />
             <SummaryCard label= 'Faturas: 'value={String(dashboard.totals.invoiceCount)} />
             <SummaryCard label= 'Clientes: 'value={String(dashboard.totals.customerCount)} />
         </div>
