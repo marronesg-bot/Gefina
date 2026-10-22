@@ -11,7 +11,7 @@ interface DashboardTotals {
     paid: number;
     pending: number;
     invoiceCount: number;
-    customerCont: number;
+    customerCount: number;
 }
 
 interface Dashboard {
@@ -28,18 +28,6 @@ async function sumAmountByStatus(status: InvoiceStatus): Promise<number> {
     return connect.rows[0].total;
 }
 
-// essas duas funcoes foi resumida em 1 --> async function count...
-
-// async function countInvoice(): Promise<number> {
-//     const connect = await pool.query('SELECT COUNT(*)::int AS total FROM invoices;');
-//     return connect.rows[0].total;
-// }
-
-// async function counCustomers(): Promise<number> {
-//     const connect = await pool.query('SELECT COUNT(*)::int AS total FROM invoices;');
-//     return connect.rows[0].total;
-// }
-
 type Resource = 'invoices' | 'customers';
 
 async function count(resource: Resource): Promise<number> {
@@ -54,7 +42,7 @@ export default async function findDashboard(): Promise<Dashboard> {
     const paid = await sumAmountByStatus('paid');
     const pending = await sumAmountByStatus('pending');
     const invoiceCount = await count('invoices');
-    const customerCont = await count('customers');
+    const customerCount = await count('customers');
     const recentInvoices = await findRecentInvoices();
     const overdueInvoices = await findOverdueInvoices();
 
@@ -63,7 +51,7 @@ export default async function findDashboard(): Promise<Dashboard> {
             paid,
             pending,
             invoiceCount,
-            customerCont
+            customerCount
         },
         recentInvoices,
         overdueInvoices
