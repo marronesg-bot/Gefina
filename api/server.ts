@@ -6,6 +6,7 @@ import dashboard from './dashboard.route.ts';
 import invoices from './invoice.route.ts';
 
 import pool from './database.ts';
+import handleError from './error.middleware.ts';
 
 const app = express();
 app.use(express.json());
@@ -39,7 +40,9 @@ app.get('/api/health', async (_request, response) => {
 app.use('/api/dashboard', dashboard);
 app.use('/api/invoices', invoices);
 
-app.use(express.static(dist));
+app.use((request) => {
+  if (!request.url.startsWith('/api')) express.static(dist);
+});
 
 app.use((request, response, next) => {
   if (request.url.startsWith('/api') || request.method !== 'GET') {
@@ -55,5 +58,7 @@ app.use((_request, response) => {
   // send(response, 404, {messege: 'Recurso não encontrado.'});foi feito agora pelo express
   response.status(400).json({ message: 'Recurso não encontrado' });
 });
+
+app.use(handleError);
 
 app.listen(Number(process.env.PORT) || 3000);
