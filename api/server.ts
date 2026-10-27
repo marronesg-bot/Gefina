@@ -40,9 +40,7 @@ app.get('/api/health', async (_request, response) => {
 app.use('/api/dashboard', dashboard);
 app.use('/api/invoices', invoices);
 
-app.use((request) => {
-  if (!request.url.startsWith('/api')) express.static(dist);
-});
+app.use(express.static(dist));
 
 app.use((request, response, next) => {
   if (request.url.startsWith('/api') || request.method !== 'GET') {
