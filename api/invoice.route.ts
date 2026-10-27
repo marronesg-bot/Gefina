@@ -2,49 +2,121 @@ import { Router } from 'express';
 
 import {
   findAllInvoices,          //<-- alteracao nessa linha
-  findInvoiceById
+  findInvoiceById,
+  insertInvoice,
+  modifyInvoice,
+  removeInvoice
+
 } from './invoice.service.ts';
 
 const router = Router();
 
-router.get('/', async(_request, response) => { //<-- inserido async e await
-  try {
-    const invoices = await findAllInvoices();    //<-- insercao dessa linha
-   
-    response.status(200).json(invoices);
+function parseId(value: string): number | undefined {
+  const id = Number(value);
 
-  } catch (error) {
-    console.error(error);
+  if (!Number.isInteger(id) || id < 1) return undefined;
 
-    response.status(500).json({error:{
-      status: 500,
-      messege:'Não foi possível carregar as faturas.'
-    }})
-  }
-  
+  return id;
+}
+
+router.get('/', async (_request, response) => { //<-- inserido async e await
+
+
+  const invoices = await findAllInvoices();    //<-- insercao dessa linha
+
+  response.status(200).json(invoices);
+
 });
 
-router.get('/:id', async(request, response) => { //<--alteracao nessas 2 linhas
-  try {
-       
-    const id = Number(request.params.id);
-    
-    const invoice = await findInvoiceById(id);    //<-- novo comando substituindo antigo FOR
-    
-    if (!invoice) response.status(404).json({error:{  //<-- Inserido novo tratamento
+router.get('/:id', async (request, response) => { 
+
+  const id = parseId(request.params.id);
+
+  if (!id) {
+    response.status(400).json({error: {
+      status: 400,
+      message: 'dentificador inválido.'
+    }});
+
+    return;
+  }
+
+  const invoice = await findInvoiceById(id);    
+
+  if (!invoice) response.status(404).json({
+    error: {  //<-- Inserido novo tratamento
       status: 404,
       message: 'Fatura não encontrada.'
-    }});
-    
-  response.status(200).json(invoice);
-  } catch (error) {
-    console.error(error);
+    }
+  });
 
-    response.status(500).json({error:{
-      status: 500,
-      message: 'Não foi possível carregar as faturas.'
+  response.status(200).json(invoice);
+});
+
+router.post('/', async (request, response) => {
+
+
+  const invoice = await insertInvoice(request.body);
+
+  if (!invoice) response.status(404).json({
+    error: {
+      status: 404,
+      message: 'Fatura não encontrada.'
+    }
+  });
+
+  response.status(201).json(invoice);
+});
+
+router.put('/:id', async (request, response) => {
+   const id = parseId(request.params.id);
+
+  if (!id) {
+    response.status(400).json({error: {
+      status: 400,
+      message: 'dentificador inválido.'
     }});
+
+    return;
   }
+
+  const invoice = await modifyInvoice(
+    id,
+    request.body
+  );
+
+  if (!invoice) response.status(404).json({
+    error: {
+      status: 404,
+      message: 'Fatura não encontrada.'
+    }
+  });
+
+  response.status(200).json(invoice);
+});
+
+router.delete('/:id', async (request, response) => {
+   const id = parseId(request.params.id);
+
+  if (!id) {
+    response.status(400).json({error: {
+      status: 400,
+      message: 'dentificador inválido.'
+    }});
+
+    return;
+  }
+
+  const deleted = await removeInvoice (id);
+
+  if (!deleted) response.status(404).json({
+    error: {
+      status: 404,
+      message: 'Fatura não encontrada.'
+    }
+  });
+
+  response.status(204).end();
 
 });
 
