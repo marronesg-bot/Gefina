@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 import InvoiceTable from './invoiceTable.tsx'; //quero trazer os componentes que estao naquele arquivo invoiceTable
 import { Invoice } from './invoiceType.ts';   //esse objetos precisam obedecer um formato de uma invoice(fatura)
+import InvoiceForm from './invoiceForm.tsx';
 
 export default function InvoicePage() {
   const [invoices, setInvoices] = useState<Invoice[]>([]); // essa funcao é algo parecido com lista de invoices
@@ -39,6 +40,7 @@ export default function InvoicePage() {
   return <>
       <h1>Faturas</h1>
       <InvoiceTable invoices={invoices} /> 
+      <InvoiceForm />
   </>
   
 }
