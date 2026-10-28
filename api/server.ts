@@ -5,12 +5,15 @@ import fs from 'node:fs';
 
 import dashboard from './dashboard.route.ts';
 import invoices from './invoice.route.ts';
+import customers from './customer.route.ts';
 
 import pool from './database.ts';
+
 import handleError from './error.middleware.ts';
 
 const app = express();
 app.use(express.json());
+
 const dist = path.join(import.meta.dirname, '..', 'web','dist');
 
 app.use((request, _response, next) => {
@@ -39,6 +42,7 @@ app.get('/api/health', async (_request, response) => {
 });
 
 app.use('/api/dashboard', dashboard);
+app.use('/api/customers', customers);
 app.use('/api/invoices', invoices);
 
 app.use(express.static(dist));
