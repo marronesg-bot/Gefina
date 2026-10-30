@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import InvoiceTable from './invoiceTable.tsx'; //quero trazer os componentes que estao naquele arquivo invoiceTable
 import { Invoice, InvoiceInput } from './invoiceType.ts';   //esse objetos precisam obedecer um formato de uma invoice(fatura)
 import InvoiceForm from './InvoiceForm.tsx';
 
-import { getAllInvoices, createInvoice} from './invoiceApi.ts'
+import { getAllInvoices, createInvoice } from './invoiceApi.ts'
 import { customerOption } from './customerType.ts';
 
 export default function InvoicePage() {
@@ -14,6 +14,22 @@ export default function InvoicePage() {
   const [busy, setBusy] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [dialogContent, setDialogContent] = useState(false);
+
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  function openModal() {
+    setFormError(null);
+    setDialogContent(true);
+
+    dialogRef.current?.showModal();
+  }
+
+  function closeModal() {
+    setFormError(null);
+
+    dialogRef.current?.close();
+  }
 
   useEffect(() => {
     async function getInvoices() {
@@ -21,7 +37,7 @@ export default function InvoicePage() {
         const datas = await getAllInvoices();
         setInvoices(datas);
 
-      } catch (error){
+      } catch (error) {
         if (error instanceof Error) setError(error.message);
       }
 
@@ -31,13 +47,13 @@ export default function InvoicePage() {
     getInvoices();
   }, []);
 
-  useEffect (() => {
+  useEffect(() => {
     async function getCustomersOptions() {
       try {
-        
+
         const response = await fetch('/api/customers/options');
-  
-        if(!response.ok) throw new Error('Falha ao buscar clientes.');
+
+        if (!response.ok) throw new Error('Falha ao buscar clientes.');
         const datas = await response.json();
         setCustomersOpitions(datas);
 
@@ -50,7 +66,7 @@ export default function InvoicePage() {
     getCustomersOptions();
   }, []);
 
-  async function refresh () {
+  async function refresh() {
     try {
       const datas = await getAllInvoices();
       setInvoices(datas);
@@ -65,6 +81,7 @@ export default function InvoicePage() {
 
     try {
       await createInvoice(datas);
+      closeModal();
       await refresh();
     } catch (error) {
       if (error instanceof Error) setFormError(error.message);
@@ -76,21 +93,32 @@ export default function InvoicePage() {
 
   if (error) return <p>{error}</p>;
 
+
   return <>
+    <header className='page-header'>
       <h1>Faturas</h1>
-        <div className='panel'>
-          <InvoiceTable invoices={invoices} /> 
-        </div>
-      <InvoiceForm
-        invoice={null}
-        customers={customerOptions}
-        error={formError}
-        onDelete={() => null}
-        onCancel={() => null}
-        onSubmit={submit}
-        busy={busy}
-        
-      />
+      <button
+        className='button-primary'
+         onClick={openModal}>Nova Fatura</button>
+    </header>
+    <div className='panel'>
+      <InvoiceTable invoices={invoices} />
+    </div>
+    <dialog 
+      className='invoice-modal'  
+      ref={dialogRef}
+      onClose={() => setDialogContent(false)}
+    >
+      {dialogContent && <InvoiceForm
+          invoice={null}
+          customers={customerOptions}
+          error={formError}
+          onDelete={() => null}
+          onCancel={closeModal}
+          onSubmit={submit}
+          busy={busy}
+        />
+      }
+    </dialog>
   </>
-  
 }
