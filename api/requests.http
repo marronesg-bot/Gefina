@@ -7,11 +7,14 @@ GET {{host}}/api/health
 ### Consultar métricas
 GET {{host}}/api/dashboard
 
+### Buscar opções de clientes
+GET {{host}}/api/customers/options
+
 ### Buscar faturas
 GET {{host}}/api/invoices
 
 ### Buscar fatura por identificador
-GET {{host}}/api/invoices/1
+GET {{host}}/api/invoices/170
 
 ### Buscar fatura por identificador inválido
 GET {{host}}/api/invoices/abc
@@ -32,15 +35,15 @@ Content-Type: application/json
 }
 
 ### Atualizar fatura
-PUT {{host}}/api/invoices/181
+PUT {{host}}/api/invoices/170
 Content-Type: application/json
 
 {
-    "customerId": 1,
+    "customerId": 7,
     "amount": 125037,
     "status": "pending",
-    "issueDate": "2026-10-01",
-    "dueDate": "2026-10-22"
+    "issueDate": "2026-05-29",
+    "dueDate": "2026-06-28"
 }
 
 ### Deletar fatura
