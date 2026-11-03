@@ -29,7 +29,7 @@ export async function createInvoice(datas: InvoiceInput): Promise<void> {
 }
 
 export async function updateInvoice(id: number, datas: InvoiceInput): Promise<void> {
-    const response = await fetch(`/api/invoices${id}`, {
+    const response = await fetch(`/api/invoices/${id}`, {
         method: 'PUT',
         headers: header,
         body: JSON.stringify(datas)

@@ -4,7 +4,7 @@ import InvoiceTable from './invoiceTable.tsx'; //quero trazer os componentes que
 import { Invoice, InvoiceInput } from './invoiceType.ts';   //esse objetos precisam obedecer um formato de uma invoice(fatura)
 import InvoiceForm from './InvoiceForm.tsx';
 
-import { getAllInvoices, createInvoice } from './invoiceApi.ts'
+import { getAllInvoices, createInvoice, updateInvoice } from './invoiceApi.ts'
 import { customerOption } from './customerType.ts';
 
 export default function InvoicePage() {
@@ -15,10 +15,12 @@ export default function InvoicePage() {
   const [formError, setFormError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [dialogContent, setDialogContent] = useState(false);
+  const [target, setTarget] = useState<Invoice | null>(null);
 
   const dialogRef = useRef<HTMLDialogElement>(null);
 
-  function openModal() {
+  function openModal(invoice: Invoice | null) {
+    setTarget(invoice);
     setFormError(null);
     setDialogContent(true);
 
@@ -80,7 +82,11 @@ export default function InvoicePage() {
     setFormError(null);
 
     try {
-      await createInvoice(datas);
+      if(!target) {
+        await createInvoice(datas);
+      } else {
+        await updateInvoice(target.id, datas);
+      }
       closeModal();
       await refresh();
     } catch (error) {
@@ -99,18 +105,23 @@ export default function InvoicePage() {
       <h1>Faturas</h1>
       <button
         className='button-primary'
-         onClick={openModal}>Nova Fatura</button>
+         onClick={()=> openModal(null)}
+         >Nova Fatura</button>
     </header>
     <div className='panel'>
-      <InvoiceTable invoices={invoices} />
+      <InvoiceTable
+        invoices={invoices}
+        edit={openModal}
+      />
     </div>
+    
     <dialog 
       className='invoice-modal'  
       ref={dialogRef}
       onClose={() => setDialogContent(false)}
-    >
+      >
       {dialogContent && <InvoiceForm
-          invoice={null}
+          invoice={target}
           customers={customerOptions}
           error={formError}
           onDelete={() => null}
