@@ -1,4 +1,4 @@
-import { SubmitEvent, useState } from "react";
+import { SetStateAction, SubmitEvent, useState } from "react";
 
 import { Invoice, InvoiceInput, InvoiceStatus } from './invoiceType.ts';
 import { customerOption } from './customerType.ts';
@@ -7,6 +7,9 @@ interface InvoiceFormProps {
     invoice: Invoice | null;
     customers: customerOption[];
     error: string | null;
+    confirmDelete: boolean;
+    setConfirmDelete: React.Dispatch<SetStateAction<boolean>>;
+    confirm: () => void;
     onDelete: () => void;
     onCancel: () => void;
     onSubmit: (values: InvoiceInput) => void;
@@ -20,9 +23,11 @@ export default function InvoiceForm (props: InvoiceFormProps) {
     const [status, setStatus] = useState<InvoiceStatus>(!props.invoice? 'pending': props.invoice.status);
     const [issueDate, setIssueDate] = useState(!props.invoice? '' : props.invoice.issueDate);
     const [dueDate, setDueDate] = useState(!props.invoice? '' : props.invoice.dueDate);
+    
 
     const handleSubmit = (event: SubmitEvent) => {
         event.preventDefault();
+        props.setConfirmDelete(false);
 
         props.onSubmit({
             customerId: Number(customerId),
@@ -104,10 +109,12 @@ export default function InvoiceForm (props: InvoiceFormProps) {
 
         <div className='form-actions'>
             {!props.invoice ? null : <button 
+                className='button-danger'
                 type='button'
                 onClick={props.onDelete}
                 disabled={props.busy}
-            >Excluir</button>}
+
+            >{props.busy && props.confirmDelete? 'Excluindo...' : 'Excluir'}</button>}
             <button 
                 className='button-secondary'
                 type='button'
@@ -118,8 +125,27 @@ export default function InvoiceForm (props: InvoiceFormProps) {
                 className='button-primary'
                 type='submit'
                 disabled={props.busy}
-            >{props.busy ? 'Salvando...' : 'Salvar'}</button>
+            >{props.busy &&!props.confirmDelete? 'Salvando...' : 'Salvar'}</button>
         </div>
+
+        {props.confirmDelete && <div className='confirm-form'>
+            <p>A exclusão é definitiva e não pode ser desfeita. Deseja prosseguir?</p>
+
+            
+                <button
+                className='button-secundary'
+                type='button'
+                onClick={() =>props.setConfirmDelete(false)}
+                disabled={props.busy}
+                >Não</button>
+                <button
+                className='button-danger'
+                type='button'
+                onClick={props.confirm}
+                disabled={props.busy}
+                >Sim</button>
+           
+        </div>}
 
     </form>;
 }

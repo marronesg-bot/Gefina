@@ -4,7 +4,7 @@ import InvoiceTable from './invoiceTable.tsx'; //quero trazer os componentes que
 import { Invoice, InvoiceInput } from './invoiceType.ts';   //esse objetos precisam obedecer um formato de uma invoice(fatura)
 import InvoiceForm from './InvoiceForm.tsx';
 
-import { getAllInvoices, createInvoice, updateInvoice } from './invoiceApi.ts'
+import { getAllInvoices, createInvoice, updateInvoice, deleteInvoice } from './invoiceApi.ts'
 import { customerOption } from './customerType.ts';
 
 export default function InvoicePage() {
@@ -16,6 +16,7 @@ export default function InvoicePage() {
   const [loading, setLoading] = useState(true);
   const [dialogContent, setDialogContent] = useState(false);
   const [target, setTarget] = useState<Invoice | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -95,6 +96,22 @@ export default function InvoicePage() {
     setBusy(false);
   }
 
+  async function confirm() {
+    if (!target) return;
+    setBusy(true);
+    setFormError(null);
+    try {
+      await deleteInvoice(target.id);
+
+      setConfirmDelete(false);
+      closeModal();
+      await refresh();
+    } catch (error) {
+      if (error instanceof Error) setFormError(error.message);
+    }
+    setBusy(false);
+  }
+
   if (loading) return <p>Carregando faturas...</p>;
 
   if (error) return <p>{error}</p>;
@@ -118,13 +135,19 @@ export default function InvoicePage() {
     <dialog 
       className='invoice-modal'  
       ref={dialogRef}
-      onClose={() => setDialogContent(false)}
+      onClose={() => {
+      setDialogContent
+      setDialogContent(false)
+      }}
       >
       {dialogContent && <InvoiceForm
           invoice={target}
           customers={customerOptions}
           error={formError}
-          onDelete={() => null}
+          confirmDelete={confirmDelete}
+          setConfirmDelete={setConfirmDelete}
+          confirm={confirm}
+          onDelete={() => setConfirmDelete(true)}
           onCancel={closeModal}
           onSubmit={submit}
           busy={busy}
