@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 
 import InvoiceTable from './invoiceTable.tsx'; //quero trazer os componentes que estao naquele arquivo invoiceTable
-import { Invoice, InvoiceInput } from './invoiceType.ts';   //esse objetos precisam obedecer um formato de uma invoice(fatura)
+import { Invoice, InvoiceFieldErros, InvoiceInput} from './invoiceType.ts';   //esse objetos precisam obedecer um formato de uma invoice(fatura)
 import InvoiceForm from './InvoiceForm.tsx';
 
 import { getAllInvoices, createInvoice, updateInvoice, deleteInvoice } from './invoiceApi.ts'
@@ -11,6 +11,7 @@ export default function InvoicePage() {
   const [invoices, setInvoices] = useState<Invoice[]>([]); // essa funcao é algo parecido com lista de invoices
   const [customerOptions, setCustomersOpitions] = useState<customerOption[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErros, setFieldErros] = useState<InvoiceFieldErros>({});
   const [busy, setBusy] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -84,7 +85,9 @@ export default function InvoicePage() {
 
     try {
       if(!target) {
-        await createInvoice(datas);
+       const failure = await createInvoice(datas);
+
+        if (failure) return setFieldErros(failure.fields);
       } else {
         await updateInvoice(target.id, datas);
       }
@@ -92,8 +95,9 @@ export default function InvoicePage() {
       await refresh();
     } catch (error) {
       if (error instanceof Error) setFormError(error.message);
-    }
+    }finally{
     setBusy(false);
+    }
   }
 
   async function confirm() {
@@ -136,14 +140,16 @@ export default function InvoicePage() {
       className='invoice-modal'  
       ref={dialogRef}
       onClose={() => {
-      setDialogContent
-      setDialogContent(false)
-      }}
+        setDialogContent
+        setDialogContent(false)
+        setFieldErros({});
+        }}
       >
       {dialogContent && <InvoiceForm
           invoice={target}
           customers={customerOptions}
           error={formError}
+          fieldErros={fieldErros}
           confirmDelete={confirmDelete}
           setConfirmDelete={setConfirmDelete}
           confirm={confirm}
