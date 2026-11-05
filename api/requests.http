@@ -27,7 +27,7 @@ POST {{host}}/api/invoices
 Content-Type: application/json
 
 {
-    "customerId": 1,
+    "customerId": "a",
     "amount": 125037,
     "status": "pending",
     "issueDate": "2026-11-01",
