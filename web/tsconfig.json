@@ -1,15 +1,15 @@
 {
-    "compilerOptions": {
-        "target": "esnext", //esnest é para versao mais recente
-        "lib": ["ESNext", "DOM"],
-        "module": "esnext", // modulo de forma mais moderna
-        "moduleResolution": "bundler",
-        "jsx": "react-jsx",
-        "strict": true,
-        "erasableSyntaxOnly": true,
-        "allowImportingTsExtensions": true,
-        "noEmit": true
-    },
+  "compilerOptions": {
+    "target": "esnext", //esnest é para versao mais recente
+    "lib": ["ESNext", "DOM"],
+    "module": "esnext", // modulo de forma mais moderna
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "erasableSyntaxOnly": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  },
 
-    "include": ["src"] //somente o que estiver dentro do src
+  "include": ["src"] //somente o que estiver dentro do src
 }
