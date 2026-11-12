@@ -1,14 +1,14 @@
+import type {
+  Customer as CustomerRecord,
+  Invoice as InvoiceRecord,
+} from '@prisma/client';
+import type {
+  InvoiceInput,
+  InvoiceStatus,
+} from './invoice.schema.ts';
 import prisma from './prisma.ts';
 
-import type 
-{ Invoice as InvoiceRecord,
-Customer as CustomerRecord
-}from '@prisma/client';
-
-import type { InvoiceStatus, InvoiceInput } from './invoice.schema.ts';
-
 type InvoiceSituation = 'paid' | 'pending' | 'overdue';
-
 
 export interface Invoice {
   id: number;
@@ -24,11 +24,17 @@ export interface Invoice {
   };
 }
 
-type InvoiceWithCustomer = InvoiceRecord & { customer:CustomerRecord };
+type InvoiceWithCustomer = InvoiceRecord & {
+  customer: CustomerRecord;
+};
 
-function formatInvoice(record: InvoiceWithCustomer ): Invoice {
-  const situation: InvoiceSituation = record.status === 'paid' ? 'paid' :
-    record.dueDate < new Date() ? 'overdue' : 'pending';
+function formatInvoice(record: InvoiceWithCustomer): Invoice {
+  const situation: InvoiceSituation =
+    record.status === 'paid'
+      ? 'paid'
+      : record.dueDate < new Date()
+        ? 'overdue'
+        : 'pending';
 
   return {
     id: record.id,
@@ -40,34 +46,36 @@ function formatInvoice(record: InvoiceWithCustomer ): Invoice {
     customer: {
       id: record.customer.id,
       name: record.customer.name,
-      email: record.customer.email
-    }
+      email: record.customer.email,
+    },
   };
 }
 
 export async function findAllInvoices(): Promise<Invoice[]> {
   const records = await prisma.invoice.findMany({
     include: { customer: true },
-    orderBy: { createdAt: 'desc'}
+    orderBy: { createdAt: 'desc' },
   });
 
   return records.map(formatInvoice);
 }
 
-export async function findInvoiceById(id: number): Promise<Invoice | undefined> {
+export async function findInvoiceById(
+  id: number,
+): Promise<Invoice | undefined> {
   const record = await prisma.invoice.findUnique({
-    include: {customer:true},
-    where: {id}
+    include: { customer: true },
+    where: { id },
   });
 
   return !record ? undefined : formatInvoice(record);
-} 
+}
 
 export async function findRecentInvoices(): Promise<Invoice[]> {
   const records = await prisma.invoice.findMany({
-    include: { customer: true},
-    orderBy: { createdAt: 'desc'},
-    take: 5
+    include: { customer: true },
+    orderBy: { createdAt: 'desc' },
+    take: 5,
   });
 
   return records.map(formatInvoice);
@@ -77,26 +85,28 @@ export async function findOverdueInvoices(): Promise<Invoice[]> {
   const records = await prisma.invoice.findMany({
     where: {
       status: 'pending',
-      dueDate: { lt: new Date()}
-    },    
-    include: { customer: true},
-    orderBy: {dueDate: 'asc'},
-    take: 5
+      dueDate: { lt: new Date() },
+    },
+    include: { customer: true },
+    orderBy: { dueDate: 'asc' },
+    take: 5,
   });
 
   return records.map(formatInvoice);
 }
 
-export async function insertInvoice(data: InvoiceInput): Promise<Invoice | undefined> {
+export async function insertInvoice(
+  data: InvoiceInput,
+): Promise<Invoice | undefined> {
   const record = await prisma.invoice.create({
     data: {
       customerId: data.customerId,
       amount: data.amount,
       status: data.status,
       issueDate: new Date(data.issueDate),
-      dueDate: new Date(data.dueDate)
+      dueDate: new Date(data.dueDate),
     },
-    include: { customer:true }
+    include: { customer: true },
   });
 
   return formatInvoice(record);
@@ -104,33 +114,33 @@ export async function insertInvoice(data: InvoiceInput): Promise<Invoice | undef
 
 export async function modifyInvoice(
   id: number,
-  data: InvoiceInput
-
-): Promise<Invoice | undefined>{
+  data: InvoiceInput,
+): Promise<Invoice | undefined> {
   const existing = await findInvoiceById(id);
 
   if (!existing) return;
 
   const record = await prisma.invoice.update({
-    where: {id},
+    where: { id },
     data: {
       customerId: data.customerId,
       amount: data.amount,
       status: data.status,
       issueDate: new Date(data.issueDate),
-      dueDate: new Date(data.dueDate)
+      dueDate: new Date(data.dueDate),
     },
-    include: { customer:true }
+    include: { customer: true },
   });
 
   return formatInvoice(record);
-
 }
 
-export async function removeInvoice(id: number): Promise<InvoiceRecord | undefined> {
+export async function removeInvoice(
+  id: number,
+): Promise<InvoiceRecord | undefined> {
   const existing = await findInvoiceById(id);
 
   if (!existing) return;
 
-  return await prisma.invoice.delete({where : { id }});
+  return await prisma.invoice.delete({ where: { id } });
 }
