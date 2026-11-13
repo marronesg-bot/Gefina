@@ -57,7 +57,7 @@ export default function InvoiceForm(props: InvoiceFormProps) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>{!props.invoice ? 'Criar fatura' : 'Editar faturas'}</h2>
+      <h2>{!props.invoice ? 'Criar fatura' : 'Editar fatura'}</h2>
       <div className="field">
         <label htmlFor="customer">Cliente</label>
         <select
