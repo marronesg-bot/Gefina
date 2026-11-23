@@ -4,15 +4,15 @@ const handleError: ErrorRequestHandler = (
   error,
   _request,
   response,
-  _next,
+  _next
 ) => {
   console.error(error);
 
   response.status(500).json({
     error: {
       status: 500,
-      message: 'Não foi possível concluir operação.',
-    },
+      message: 'Não foi possível concluir operação.'
+    }
   });
 };
 
