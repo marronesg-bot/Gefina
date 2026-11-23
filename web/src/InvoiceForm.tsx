@@ -1,14 +1,14 @@
 import {
   type SetStateAction,
   type SubmitEvent,
-  useState,
+  useState
 } from 'react';
 import type { customerOption } from './customerType.ts';
 import type {
   Invoice,
   InvoiceFieldErros,
   InvoiceInput,
-  InvoiceStatus,
+  InvoiceStatus
 } from './invoiceType.ts';
 
 interface InvoiceFormProps {
@@ -27,19 +27,19 @@ interface InvoiceFormProps {
 
 export default function InvoiceForm(props: InvoiceFormProps) {
   const [customerId, setCustomerID] = useState(
-    !props.invoice ? undefined : String(props.invoice.customer.id),
+    !props.invoice ? undefined : String(props.invoice.customer.id)
   );
   const [amount, setAmount] = useState(
-    !props.invoice ? '' : (props.invoice.amount / 100).toFixed(2),
+    !props.invoice ? '' : (props.invoice.amount / 100).toFixed(2)
   );
   const [status, setStatus] = useState<InvoiceStatus>(
-    !props.invoice ? 'pending' : props.invoice.status,
+    !props.invoice ? 'pending' : props.invoice.status
   );
   const [issueDate, setIssueDate] = useState(
-    !props.invoice ? '' : props.invoice.issueDate,
+    !props.invoice ? '' : props.invoice.issueDate
   );
   const [dueDate, setDueDate] = useState(
-    !props.invoice ? '' : props.invoice.dueDate,
+    !props.invoice ? '' : props.invoice.dueDate
   );
 
   const handleSubmit = (event: SubmitEvent) => {
@@ -51,26 +51,27 @@ export default function InvoiceForm(props: InvoiceFormProps) {
       amount: Math.round(Number(amount) * 100),
       status,
       issueDate,
-      dueDate,
+      dueDate
     });
   };
 
   const field = 'flex flex-col gap-1';
   const label = 'text-sm text-text-muted';
-  const input = 'px-3 py-2 border border-border rounded-control bg-surface-raised scheme-dark focus-visible:outline-2 focus-visible:outline-primary';
-  const button = 'flex-1 px-4 py-2 rounded-control cursor-pointer disabled:cursor-default disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-primary';
+  const input =
+    'px-3 py-2 border border-border rounded-control bg-surface-raised scheme-dark focus-visible:outline-2 focus-visible:outline-primary';
+  const button =
+    'flex-1 px-4 py-2 rounded-control cursor-pointer disabled:cursor-default disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-primary';
   const error = 'test-sm text-overdue';
 
   return (
-    <form
-       className='flex flex-col gap-4'
-       onSubmit={handleSubmit}>
-      <h2 className='text-xl font-semibold'>{!props.invoice ? 'Criar fatura' : 'Editar fatura'}</h2>
-      
+    <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+      <h2 className="text-xl font-semibold">
+        {!props.invoice ? 'Criar fatura' : 'Editar fatura'}
+      </h2>
+
       <div className={field}>
-        <label 
-          className={label} 
-          htmlFor="customer">Cliente
+        <label className={label} htmlFor="customer">
+          Cliente
         </label>
         <select
           className={`${input} appearance-none`}
@@ -89,11 +90,10 @@ export default function InvoiceForm(props: InvoiceFormProps) {
           })}
         </select>
       </div>
-      <div className='flex gap-2'>
+      <div className="flex gap-2">
         <div className={`${field} flex-1`}>
-          <label 
-            className={label} 
-            htmlFor="amount">Valor
+          <label className={label} htmlFor="amount">
+            Valor
           </label>
           <input
             className={input}
@@ -107,28 +107,26 @@ export default function InvoiceForm(props: InvoiceFormProps) {
           />
         </div>
         <div className={field}>
-            <label 
-              className={label} 
-              htmlFor="status">Situação
-            </label>
-            <select
-              className={`${input} appearance-none`}
-              id="status"
-              value={status}
-              onChange={(event) =>
-                setStatus(event.target.value as InvoiceStatus)
-              }
-            >
-              <option value="pending">Pendente</option>
-              <option value="paid">Paga</option>
-            </select>
+          <label className={label} htmlFor="status">
+            Situação
+          </label>
+          <select
+            className={`${input} appearance-none`}
+            id="status"
+            value={status}
+            onChange={(event) =>
+              setStatus(event.target.value as InvoiceStatus)
+            }
+          >
+            <option value="pending">Pendente</option>
+            <option value="paid">Paga</option>
+          </select>
         </div>
       </div>
-      <div className='flex gap-2'>
+      <div className="flex gap-2">
         <div className={`${field} flex-1`}>
-          <label 
-            className={label} 
-            htmlFor="issueDate">Emissão
+          <label className={label} htmlFor="issueDate">
+            Emissão
           </label>
           <input
             className={input}
@@ -140,9 +138,8 @@ export default function InvoiceForm(props: InvoiceFormProps) {
           />
         </div>
         <div className={`${field} flex-1`}>
-          <label 
-            className={label} 
-            htmlFor="dueDate">Vencimento
+          <label className={label} htmlFor="dueDate">
+            Vencimento
           </label>
           <input
             className={input}
@@ -156,7 +153,7 @@ export default function InvoiceForm(props: InvoiceFormProps) {
         </div>
       </div>
 
-      <div className='flex gap-2 mt-6'>
+      <div className="flex gap-2 mt-6">
         {!props.invoice ? null : (
           <button
             className={`${button} bg-surface-raised text-overdue border border-overdue`}
@@ -189,14 +186,13 @@ export default function InvoiceForm(props: InvoiceFormProps) {
       </div>
 
       {props.confirmDelete && (
-        <div className= 'flex gap-2 intems-center'>
-          <p className= 'text-pending'>
-            A exclusão é irreversivel. Deseja
-            prosseguir ?
+        <div className="flex gap-2 intems-center">
+          <p className="text-pending">
+            A exclusão é irreversivel. Deseja prosseguir ?
           </p>
 
           <button
-            className= {`${button} bg-surface-raised border border-border`}
+            className={`${button} bg-surface-raised border border-border`}
             type="button"
             onClick={() => props.setConfirmDelete(false)}
             disabled={props.busy}

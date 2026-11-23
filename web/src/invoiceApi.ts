@@ -1,7 +1,7 @@
 import type {
   ApiFailure,
   Invoice,
-  InvoiceInput,
+  InvoiceInput
 } from './invoiceType.ts';
 
 const header = { 'content-type': 'application/json' };
@@ -23,12 +23,12 @@ export async function getInvoices(id: number): Promise<Invoice> {
 }
 
 export async function createInvoice(
-  datas: InvoiceInput,
+  datas: InvoiceInput
 ): Promise<ApiFailure | undefined> {
   const response = await fetch('api/invoices', {
     method: 'POST',
     headers: header,
-    body: JSON.stringify(datas),
+    body: JSON.stringify(datas)
   });
 
   if (response.status === 400) {
@@ -36,7 +36,7 @@ export async function createInvoice(
 
     return {
       message: body.error.message,
-      fields: body.error.fields,
+      fields: body.error.fields
     };
   }
 
@@ -45,12 +45,12 @@ export async function createInvoice(
 
 export async function updateInvoice(
   id: number,
-  datas: InvoiceInput,
+  datas: InvoiceInput
 ): Promise<void> {
   const response = await fetch(`/api/invoices/${id}`, {
     method: 'PUT',
     headers: header,
-    body: JSON.stringify(datas),
+    body: JSON.stringify(datas)
   });
 
   if (!response.ok) throw new Error('Falha ao editar fatura.');
@@ -58,7 +58,7 @@ export async function updateInvoice(
 
 export async function deleteInvoice(id: number): Promise<void> {
   const response = await fetch(`/api/invoices/${id}`, {
-    method: 'DELETE',
+    method: 'DELETE'
   });
 
   if (!response.ok) throw new Error('Falaha ao excluir fatura.');

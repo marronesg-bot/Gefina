@@ -13,8 +13,8 @@ export async function findCustomersOptions(): Promise<
     select: {
       id: true,
       name: true,
-      email: true,
+      email: true
     },
-    orderBy: { name: 'asc' },
+    orderBy: { name: 'asc' }
   });
 }

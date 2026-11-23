@@ -13,8 +13,8 @@ router.get('/', async (_request, response) => {
 
     response.status(500).json({
       error: {
-        message: 'Não foi possível carregar o painel inicial',
-      },
+        message: 'Não foi possível carregar o painel inicial'
+      }
     });
   }
 });
