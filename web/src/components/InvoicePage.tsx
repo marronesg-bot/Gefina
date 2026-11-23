@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
-import type { customerOption } from './customerType.ts';
+import type { customerOption } from '../types/customerType.ts';
 import InvoiceForm from './InvoiceForm.tsx';
 import {
   createInvoice,
   deleteInvoice,
   getAllInvoices,
   updateInvoice
-} from './invoiceApi.ts';
+} from '../requests/invoiceApi.ts';
 import InvoiceTable from './invoiceTable.tsx'; //quero trazer os componentes que estao naquele arquivo invoiceTable
 import type {
   Invoice,
   InvoiceFieldErros,
   InvoiceInput
-} from './invoiceType.ts'; //esse objetos precisam obedecer um formato de uma invoice(fatura)
+} from '../types/invoiceType.ts'; //esse objetos precisam obedecer um formato de uma invoice(fatura)
 
 export default function InvoicePage() {
   const [invoices, setInvoices] = useState<Invoice[]>([]); // essa funcao é algo parecido com lista de invoices

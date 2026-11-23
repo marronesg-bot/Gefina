@@ -11,5 +11,5 @@
     "noEmit": true
   },
 
-  "include": ["src"] //somente o que estiver dentro do src
+  "include": ["src", "test.setup.ts"] //somente o que estiver dentro do src
 }
