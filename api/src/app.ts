@@ -10,7 +10,7 @@ import prisma from './prisma.ts';
 const app = express();
 app.use(express.json());
 
-const dist = path.join(import.meta.dirname, '..', 'web', 'dist');
+const dist = path.join(import.meta.dirname, '..', '..', 'web', 'dist');
 
 app.use((request, _response, next) => {
   console.log(`${request.method} ${request.url}`);
